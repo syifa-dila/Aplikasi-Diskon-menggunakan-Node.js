@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Aplikasi Manajemen Keuangan</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <h1>Aplikasi Manajemen Keuangan</h1>
+  <div id="filter-container">
+    <label for="cari">Cari:</label>
+    <input type="text" id="cari">
+  </div>
+  <table id="tabel-diskon">
+    <thead>
+      <tr>
+        <th>Jenis</th>
+        <th>Keterangan</th>
+        <th>Jumlah</th>
+        <th>Tanggal</th>
+        <th>Aksi</th>
+      </tr>
+      <form id="form-diskon">
+        <tr>
+          <th>
+            <select id="jenis">
+              <option value="pemasukan">Pemasukan</option>
+              <option value="pengeluaran">Pengeluaran</option>
+            </select>
+          </th>
+          <th>
+            <input type="text" id="nama_barang">
+          </th>
+          <th>
+            <input type="text" id="kategori">
+          </th>
+          <th>
+            <input type="text" id="harga">
+          </th>
+            <input type="text" id="stok">
+          </th>
+          <th>
+            <button type="submit">Tambah</button>
+          </th>
+        </tr>
+      </form>
+    </thead>
+    <tbody>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="3">Total Pemasukan:</td>
+        <td colspan="2" id="total-pemasukan"></td>
+      </tr>
+      <tr>
+        <td colspan="3">Total Pengeluaran:</td>
+        <td colspan="2" id="total-pengeluaran"></td>
+      </tr>
+      <tr>
+        <td colspan="3">Saldo:</td>
+        <td colspan="2" id="saldo"></td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <script src="app.js"></script>
+  <script src="api.js"></script>
+  <script src="listener.js"></script>
+</body>
+
+</html>
