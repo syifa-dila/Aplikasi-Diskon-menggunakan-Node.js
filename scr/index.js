@@ -30,10 +30,10 @@
         console.error('Database connection failed:', err);
     });
 
-    // Route untuk '/barang'
-    app.get('/barang', async (req, res) => {
+    // Route untuk tabel'
+    app.get('/diskon', async (req, res) => {
         try {
-            const [rows, fields] = await db.query('SELECT * FROM nama_barang');
+            const [rows, fields] = await db.query('SELECT * FROM diskon');
             res.json(rows);
         } catch (error) {
             console.error(error);

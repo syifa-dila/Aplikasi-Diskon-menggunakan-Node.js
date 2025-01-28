@@ -1,66 +1,69 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Aplikasi Manajemen Keuangan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aplikasi Manajemen Perhitungan Diskon</title>
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-  <h1>Aplikasi Manajemen Keuangan</h1>
+  <h1>Aplikasi Manajemen Perhitungan Diskon</h1>
   <div id="filter-container">
     <label for="cari">Cari:</label>
-    <input type="text" id="cari">
+    <input type="text" id="cari" placeholder="Cari berdasarkan nama atau kategori">
   </div>
+  <form id="form-diskon">
+    <h2>Tambah Barang</h2>
+    <div>
+      <label for="nama_barang">Nama Barang:</label>
+      <input type="text" id="nama_barang" required>
+    </div>
+    <div>
+      <label for="kategori">Kategori:</label>
+      <input type="text" id="kategori" required>
+    </div>
+    <div>
+      <label for="harga_awal">Harga Awal:</label>
+      <input type="number" id="harga_awal" step="0.01" required>
+    </div>
+    <div>
+      <label for="diskon_persen">Diskon (%):</label>
+      <input type="number" id="diskon_persen" step="0.01" required>
+    </div>
+    <div>
+      <label for="stok">Stok:</label>
+      <input type="number" id="stok" required>
+    </div>
+    <button type="submit">Tambah Barang</button>
+  </form>
+
   <table id="tabel-diskon">
     <thead>
       <tr>
-        <th>Jenis</th>
-        <th>Keterangan</th>
-        <th>Jumlah</th>
-        <th>Tanggal</th>
+        <th>ID Barang</th>
+        <th>Nama Barang</th>
+        <th>Kategori</th>
+        <th>Harga Awal</th>
+        <th>Diskon (%)</th>
+        <th>Harga Setelah Diskon</th>
+        <th>Stok</th>
         <th>Aksi</th>
       </tr>
-      <form id="form-diskon">
-        <tr>
-          <th>
-            <select id="jenis">
-              <option value="pemasukan">Pemasukan</option>
-              <option value="pengeluaran">Pengeluaran</option>
-            </select>
-          </th>
-          <th>
-            <input type="text" id="nama_barang">
-          </th>
-          <th>
-            <input type="text" id="kategori">
-          </th>
-          <th>
-            <input type="text" id="harga">
-          </th>
-            <input type="text" id="stok">
-          </th>
-          <th>
-            <button type="submit">Tambah</button>
-          </th>
-        </tr>
-      </form>
     </thead>
     <tbody>
     </tbody>
     <tfoot>
       <tr>
-        <td colspan="3">Total Pemasukan:</td>
-        <td colspan="2" id="total-pemasukan"></td>
+        <td colspan="5">Total Pemasukan:</td>
+        <td colspan="3" id="total-pemasukan">Rp 0</td>
       </tr>
       <tr>
-        <td colspan="3">Total Pengeluaran:</td>
-        <td colspan="2" id="total-pengeluaran"></td>
+        <td colspan="5">Total Pengeluaran:</td>
+        <td colspan="3" id="total-pengeluaran">Rp 0</td>
       </tr>
       <tr>
-        <td colspan="3">Saldo:</td>
-        <td colspan="2" id="saldo"></td>
+        <td colspan="5">Saldo:</td>
+        <td colspan="3" id="saldo">Rp 0</td>
       </tr>
     </tfoot>
   </table>
@@ -69,5 +72,4 @@
   <script src="api.js"></script>
   <script src="listener.js"></script>
 </body>
-
 </html>
