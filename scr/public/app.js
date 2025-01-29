@@ -3,28 +3,29 @@ const inputNamaBarang = document.querySelector('#nama_barang');
 const inputKategori = document.querySelector('#kategori');
 const inputHargaAwal = document.querySelector('#harga_awal');
 const inputDiskonPersen = document.querySelector('#diskon_persen');
+const inputHargaSetelahDiskon = document.querySelector('#harga_setelah_diskon');
 const inputStok = document.querySelector('#stok');
-const bodiTabel = document.querySelector('#tabel-barang tbody');
-const inputCari = document.querySelector('#cari');
+const bodiTabel = document.querySelector('#tabel-diskon tbody');
+// const inputCari = document.querySelector('#cari');
 
 let daftarBarang = [];
 
 async function fetchBarang() {
   try {
-    const response = await fetch('/api/diskon');
-    const data = await response.json();
-    daftarBarang = data;
+    const response = await fetch("/api/diskon");
+    if (!response.ok) throw new Error("Gagal memasukkan data!");
+    daftarBarang = await response.json();
     updateTabel(daftarBarang);
   } catch (error) {
-    console.error('Gagal mengambil data diskon:', error);
+    console.error(error);
   }
 }
 
 function updateTabel(dataBarang) {
   bodiTabel.innerHTML = '';
-  for (let barang of dataBarang) {
+  dataBarang.forEach((barang) => {
     const hargaSetelahDiskon = barang.harga_awal * (1 - barang.diskon_persen / 100);
-    const baris = document.createElement('tr');
+    const baris = document.createElement("tr");
     baris.innerHTML = `
       <td>${barang.id_barang}</td>
       <td>${barang.nama_barang}</td>
@@ -38,17 +39,21 @@ function updateTabel(dataBarang) {
       </td>
     `;
     bodiTabel.appendChild(baris);
-  }
+  });
 }
 
-formDiskon.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const hargaSetelahDiskon = parseFloat(inputHargaAwal.value) * (1 - parseFloat(inputDiskonPersen.value) / 100);
+formDiskon.addEventListener('submit', async function (event) {
+  event.preventDefault();
+
+  const hargaAwal = parseFloat(inputHargaAwal.value);
+  const diskonPersen = parseFloat(inputDiskonPersen.value);
+  const hargaSetelahDiskon = hargaAwal - (hargaAwal * diskonPersen / 100);
+
   const barangBaru = {
     nama_barang: inputNamaBarang.value,
     kategori: inputKategori.value,
-    harga_awal: parseFloat(inputHargaAwal.value),
-    diskon_persen: parseFloat(inputDiskonPersen.value),
+    harga_awal: hargaAwal,
+    diskon_persen: diskonPersen,
     harga_setelah_diskon: hargaSetelahDiskon,
     stok: parseInt(inputStok.value, 10),
   };
@@ -59,40 +64,35 @@ formDiskon.addEventListener('submit', async (e) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(barangBaru),
     });
-    if (response.ok) {
-      await fetchBarang(); 
-      formDiskon.reset();
-    } else {
-      console.error('Gagal menambah barang:', response.statusText);
-    }
+
+    if (!response.ok) throw new Error("Gagal Menambahkan data!");
+
+    await fetchBarang(); // Memuat ulang data barang setelah ditambahkan
+    formDiskon.reset(); // Reset form setelah submit
+
   } catch (error) {
-    console.error('Error saat menambah barang:', error);
+    console.error(error);
   }
 });
 
 async function hapusBarang(id) {
   try {
-    const response = await fetch(`/api/barang/${id}`, {
-      method: 'DELETE',
-    });
-    if (response.ok) {
-      await fetchBarang();
-    } else {
-      console.error('Gagal menghapus barang:', response.statusText);
-    }
+    const response = await fetch(`/api/diskon/${id}`, { method: "DELETE" });
+    if (!response.ok) throw new Error("Gagal menghapus data!");
+    await fetchBarang(); // Memuat ulang data barang setelah dihapus
   } catch (error) {
-    console.error('Error saat menghapus barang:', error);
+    console.error(error);
   }
 }
 
-inputCari.addEventListener('input', () => {
-  const keyword = inputCari.value.toLowerCase();
-  const hasilFilter = daftarBarang.filter(
-    (barang) =>
-      barang.nama_barang.toLowerCase().includes(keyword) ||
-      barang.kategori.toLowerCase().includes(keyword)
-  );
-  updateTabel(hasilFilter);
-});
+// inputCari.addEventListener('input', () => {
+//   const keyword = inputCari.value.toLowerCase();
+//   const hasilFilter = daftarBarang.filter(
+//     (barang) =>
+//       barang.nama_barang.toLowerCase().includes(keyword) ||
+//       barang.kategori.toLowerCase().includes(keyword)
+//   );
+//   updateTabel(hasilFilter);
+// });
 
 fetchBarang();

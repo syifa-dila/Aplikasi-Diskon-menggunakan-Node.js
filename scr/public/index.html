@@ -8,10 +8,7 @@
 </head>
 <body>
   <h1>Aplikasi Manajemen Perhitungan Diskon</h1>
-  <div id="filter-container">
-    <label for="cari">Cari:</label>
-    <input type="text" id="cari" placeholder="Cari berdasarkan nama atau kategori">
-  </div>
+
   <form id="form-diskon">
     <h2>Tambah Barang</h2>
     <div>
@@ -37,10 +34,11 @@
     <button type="submit">Tambah Barang</button>
   </form>
 
+  <h2>Hasil Perhitungan Diskon</h2>
   <table id="tabel-diskon">
     <thead>
       <tr>
-        <th>ID Barang</th>
+        <th>ID</th>
         <th>Nama Barang</th>
         <th>Kategori</th>
         <th>Harga Awal</th>
@@ -52,24 +50,42 @@
     </thead>
     <tbody>
     </tbody>
-    <tfoot>
-      <tr>
-        <td colspan="5">Total Pemasukan:</td>
-        <td colspan="3" id="total-pemasukan">Rp 0</td>
-      </tr>
-      <tr>
-        <td colspan="5">Total Pengeluaran:</td>
-        <td colspan="3" id="total-pengeluaran">Rp 0</td>
-      </tr>
-      <tr>
-        <td colspan="5">Saldo:</td>
-        <td colspan="3" id="saldo">Rp 0</td>
-      </tr>
-    </tfoot>
   </table>
+  <script>
+    let idCounter = 1;
+    document.getElementById('form-diskon').addEventListener('submit', function(event) {
+      event.preventDefault();
 
-  <script src="app.js"></script>
-  <script src="api.js"></script>
-  <script src="listener.js"></script>
+      const nama_barang = document.getElementById('nama_barang').value;
+      const kategori = document.getElementById('kategori').value;
+      const harga_awal = parseFloat(document.getElementById('harga_awal').value);
+      const diskon_persen = parseFloat(document.getElementById('diskon_persen').value);
+      const stok = parseInt(document.getElementById('stok').value);
+      const harga_setelah_diskon = harga_awal - (harga_awal * (diskon_persen / 100));
+      const id = idCounter++;
+
+      const tabelDiskon = document.getElementById('tabel-diskon').getElementsByTagName('tbody')[0];
+
+      let row = tabelDiskon.insertRow();
+      row.id = `diskon-${id}`;
+      row.innerHTML = `<td>${id}</td><td>${nama_barang}</td><td>${kategori}</td><td>${harga_awal.toFixed(2)}</td><td>${diskon_persen}%</td>
+                        <td>${harga_setelah_diskon.toFixed(2)}</td><td>${stok}</td>
+                        <td><button onclick="hapusData(${id})">Hapus</button></td>`;
+      
+      document.getElementById('form-diskon').reset();
+    });
+
+    function hapusData(id) {
+      if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
+        let row = document.getElementById(`diskon-${id}`);
+        if (row) {
+          row.remove();
+        }
+      }
+    }
+  </script>
+    <script src="app.js"></script>
+    <script src="api.js"></script>
+    <script src="listener.js"></script>
 </body>
 </html>
