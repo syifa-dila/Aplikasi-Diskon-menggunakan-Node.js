@@ -4,6 +4,6 @@ const {daftarDiskon, tambahDiskon, hapusDiskon} = require('./handlers');
 
 router.get('/diskon', daftarDiskon);
 router.post('/diskon', tambahDiskon,);
-router.delete('/diskon', hapusDiskon,);
+router.delete('/diskon/:id', hapusDiskon,);
 
 module.exports = router

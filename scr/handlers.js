@@ -1,3 +1,52 @@
+// const Diskon = require('.Diskon/scr/models/Diskon'); // Pastikan model sudah dibuat
+
+// // Ambil semua diskon
+// const daftarDiskon = async (req, res) => {
+//   try {
+//     const diskonList = await Diskon.find(); // Ambil dari database
+//     res.json(diskonList);
+//   } catch (error) {
+//     res.status(500).json({ error: 'Gagal mengambil data' });
+//   }
+// };
+
+// // Tambah diskon baru
+// const tambahDiskon = async (req, res) => {
+//   try {
+//     const { nama_barang, kategori, harga_awal, diskon_persen, stok } = req.body;
+//     const harga_setelah_diskon = (harga_awal * (1 - diskon_persen / 100)).toFixed(2);
+
+//     const newDiskon = new Diskon({
+//       nama_barang,
+//       kategori,
+//       harga_awal,
+//       diskon_persen,
+//       harga_setelah_diskon,
+//       stok
+//     });
+
+//     await newDiskon.save(); // Simpan ke database
+//     res.status(201).json(newDiskon); // Kirim respons ke frontend
+//   } catch (error) {
+//     res.status(500).json({ error: 'Gagal menambah diskon' });
+//   }
+// };
+
+// // Hapus diskon berdasarkan ID
+// const hapusDiskon = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     await Diskon.findByIdAndDelete(id);
+//     res.json({ message: 'Diskon berhasil dihapus' });
+//   } catch (error) {
+//     res.status(500).json({ error: 'Gagal menghapus diskon' });
+//   }
+// };
+
+// module.exports = { daftarDiskon, tambahDiskon, hapusDiskon };
+
+
+
 const db = require("./db");
 exports.daftarDiskon = async (req, res) => {
     try {

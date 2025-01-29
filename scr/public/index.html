@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
@@ -51,19 +50,25 @@
     <tbody>
     </tbody>
   </table>
+
   <script>
     let idCounter = 1;
+
     document.getElementById('form-diskon').addEventListener('submit', function(event) {
       event.preventDefault();
 
+      // Mengambil nilai dari input form
       const nama_barang = document.getElementById('nama_barang').value;
       const kategori = document.getElementById('kategori').value;
       const harga_awal = parseFloat(document.getElementById('harga_awal').value);
       const diskon_persen = parseFloat(document.getElementById('diskon_persen').value);
       const stok = parseInt(document.getElementById('stok').value);
+      
+      // Menghitung harga setelah diskon
       const harga_setelah_diskon = harga_awal - (harga_awal * (diskon_persen / 100));
       const id = idCounter++;
 
+      // Menambahkan data ke tabel di halaman
       const tabelDiskon = document.getElementById('tabel-diskon').getElementsByTagName('tbody')[0];
 
       let row = tabelDiskon.insertRow();
@@ -71,21 +76,55 @@
       row.innerHTML = `<td>${id}</td><td>${nama_barang}</td><td>${kategori}</td><td>${harga_awal.toFixed(2)}</td><td>${diskon_persen}%</td>
                         <td>${harga_setelah_diskon.toFixed(2)}</td><td>${stok}</td>
                         <td><button onclick="hapusData(${id})">Hapus</button></td>`;
-      
+      const data = {
+        nama_barang: nama_barang,
+        kategori: kategori,
+        harga_awal: harga_awal,
+        diskon_persen: diskon_persen,
+        harga_setelah_diskon: harga_setelah_diskon,
+        stok: stok
+      };
+
+      fetch('http://localhost:1900/api/diskon', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Data berhasil dikirim:', data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
       document.getElementById('form-diskon').reset();
     });
-
     function hapusData(id) {
       if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
         let row = document.getElementById(`diskon-${id}`);
         if (row) {
           row.remove();
+          
+          // Mengirim request DELETE ke API
+          fetch(`http://localhost:1900/api/diskon/${id}`, {
+            method: 'DELETE'
+          })
+          .then(response => response.json())
+          .then(data => {
+            console.log('Data berhasil dihapus:', data);
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
         }
       }
     }
   </script>
-    <script src="app.js"></script>
-    <script src="api.js"></script>
-    <script src="listener.js"></script>
+
+  <script src="app.js"></script>
+  <script src="api.js"></script>
+  <script src="listener.js"></script>
 </body>
 </html>

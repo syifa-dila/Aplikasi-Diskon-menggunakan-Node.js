@@ -1,3 +1,5 @@
+const { daftarDiskon } = require("../handlers");
+
 async function ambilDiskon() {
     try {
       const response = await fetch('/api/diskon');
@@ -12,32 +14,27 @@ async function ambilDiskon() {
     }
   }
   async function tambahDiskon(diskon) {
-    const response = await fetch('http://localhost:1900/api/diskon', {
-      method: 'POST',
-      headers: {
-        'Content-Type' : 'application/json',
-      },
-      body: JSON.stringify(diskon),
-    });
-    return await response.json();
-    // try {
-    //   diskon.harga_setelah_diskon = (diskon.harga_awal * (1 - diskon.diskon_persen / 100)).toFixed(2);
+    try {
+      const response = await fetch('http://localhost:1900/api/diskon', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(diskon),
+      });
   
-    //   const response = await fetch('/api/diskon', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify(diskon),
-    //   });
+      if (!response.ok) {
+        throw new Error('Gagal menambahkan diskon');
+      }
   
-    //   if (response.ok) {
-    //     ambilDiskon();
-    //     return;
-    //   }
-    // } catch (error) {
-    //   console.error('Error:', error);
-    // }
-    // alert('Gagal menambah data diskon.');
+      const newDiskon = await response.json();
+      daftarDiskon.push(newDiskon);
+      updateTabel(daftarDiskon);
+    } catch (error) {
+      console.error('Error:', error);
+    }
   }
+  
   async function hapusDiskon(id) {
     if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
       try {
@@ -71,7 +68,7 @@ async function ambilDiskon() {
   //   }
   //   alert('Gagal memperbarui data.');
   // }
-  
+
 //   function updateTabel(dataBarang) {
 //     bodiTabel.innerHTML = ''; 
 //     dataBarang.forEach((barang) => {
